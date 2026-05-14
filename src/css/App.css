@@ -127,7 +127,6 @@ h2 {
 
 .noticia {
   display: grid;
-  grid-template-rows: 20rem 1fr;
   grid-template-rows: auto 1fr;
   border: 1px solid var(--colorTextoSuave);
   border-radius: 1rem;

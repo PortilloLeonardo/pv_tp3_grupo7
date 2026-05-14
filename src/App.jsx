@@ -3,12 +3,16 @@ import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import heroImg from './assets/hero.png'
 import './App.css'
+import proyectoService from './services/proyectoService'
 
 function App() {
   const [count, setCount] = useState(0)
+ console.log(proyectoService.obtenerProyectos())
+
 
   return (
     <>
+    <h1>Proyectos</h1>
       <section id="center">
         <div className="hero">
           <img src={heroImg} className="base" width="170" height="179" alt="" />

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { obtenerProyectos, eliminarProyecto, buscarProyecto } from '../services/proyectoService';
-
+import ProyectoCard from './ProyectoCard';
 const ListaProyectos = () => {
   const [proyectos, setProyectos] = useState([]);
   const [busqueda, setBusqueda] = useState('');

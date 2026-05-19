@@ -1,18 +1,17 @@
+import React from 'react';
+
 const Header = () => {
   return (
     <header>
-      <section className="presentacion">
+      <div className="presentacion">
+        <div className="contenendor-logo">
+          {/* Si tenés un logo en src/assets/logo.png, podés usarlo */}
+          <img src="/logo.png" className="logo" alt="Logo" />
+        </div>
         <div className="titulo">
-          <h1>Plataforma de Gestión de Proyectos</h1>
+          <h1>Gestión de Proyectos Educativos</h1>
         </div>
-        <div className="contenedor-logo">
-          <img 
-            className="logo" 
-            src="assets/img/fi-logo.png" 
-            alt="Logo de la Facultad de ingenieria-unju." 
-          />
-        </div>
-      </section>
+      </div>
     </header>
   );
 };

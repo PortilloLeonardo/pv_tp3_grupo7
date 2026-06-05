@@ -1,4 +1,4 @@
-# TRABAJO PRÁCTICO N°3 PARTE 1: RECUPERATORIO
+# TRABAJO PRÁCTICO N°3
 
 ## Programación Visual - 2026
 
@@ -47,7 +47,7 @@ Este proyecto fue desarrollado utilizando React y Vite. Consiste en una aplicaci
 
 Clonar el repositorio:
 
-git clone https://github.com/llNEBll/pv_tp3pt1_grupo7
+git clone https://github.com/PortilloLeonardo/pv_tp3_grupo7
 
 Ejecutar proyecto en la terminal:
 

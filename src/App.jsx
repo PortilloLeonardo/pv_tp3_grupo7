@@ -1,23 +1,21 @@
-import './css/style.css'
-import './css/proyectos.css'
-
+import { useState } from 'react'
 import Header from './components/Header'
-import Nav from './components/Nav'
+import ListaProyectos from'./components/ListaProyectos'
 import Footer from './components/Footer'
-import ListaProyectos from './components/ListaProyectos'
+import Nav from './components/Nav'
+import './css/proyectos.css'
+import './css/style.css'
 
-function App() {
+const App = () => {
   return (
-    <>
-      <Header />
-      <Nav />
-      
+    <div>
+      <Header/>
+      <Nav/>
       <main>
-        <ListaProyectos />
+        <ListaProyectos/>
       </main>
-
-      <Footer />
-    </>
+      <Footer/>  
+    </div>
   )
 }
 

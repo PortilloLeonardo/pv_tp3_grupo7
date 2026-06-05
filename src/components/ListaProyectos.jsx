@@ -1,82 +1,173 @@
-import React, { useState, useEffect } from 'react';
-import { obtenerProyectos, eliminarProyecto, buscarProyecto } from '../services/proyectoService';
-import ProyectoCard from './ProyectoCard';
+import proyectoService from "../services/proyectoService";
+import { useState } from "react";
+import ProyectoCard from "./ProyectoCard";
+import DetalleProyecto from "./DetalleProyecto";
+
 const ListaProyectos = () => {
-  const [proyectos, setProyectos] = useState([]);
-  const [busqueda, setBusqueda] = useState('');
+  const [proyectos, setProyectos] = useState(
+    proyectoService.obtenerProyectos()
+  );
 
-  // Cargar proyectos al inicio
-  useEffect(() => {
-    setProyectos(obtenerProyectos());
-  }, []);
+  const [textoBusqueda, setTextoBusqueda] = useState("");
 
-  const handleEliminar = (id) => {
-    eliminarProyecto(id);
-    setProyectos(obtenerProyectos());
-  };
+  const [proyectoSeleccionado, setProyectoSeleccionado] =
+    useState(null);
+
+  const [formulario, setFormulario] = useState({
+    titulo: "",
+    categoria: "",
+    estado: "En curso",
+    descripcion: "",
+    recursos: "",
+    equipo: ""
+  });
+
+  const proyectosFiltrados =
+    textoBusqueda === ""
+      ? proyectos
+      : proyectoService.buscarProyecto(textoBusqueda);
 
   const handleBuscar = (e) => {
-    const texto = e.target.value;
-    setBusqueda(texto);
-    
-    if (texto.trim() === '') {
-      setProyectos(obtenerProyectos());
-    } else {
-      setProyectos(buscarProyecto(texto));
-    }
+    setTextoBusqueda(e.target.value);
+  };
+
+  const handleChange = (e) => {
+    setFormulario({
+      ...formulario,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleVerDetalle = (proyecto) => {
+    setProyectoSeleccionado(proyecto);
+  };
+
+  const handleAgregarProyecto = () => {
+    proyectoService.agregarProyecto({
+      id: Date.now(),
+      titulo: formulario.titulo,
+      categoria: formulario.categoria,
+      estado: formulario.estado,
+      descripcion: formulario.descripcion,
+      recursos: formulario.recursos
+        .split(",")
+        .map((item) => item.trim()),
+      equipo: formulario.equipo
+        .split(",")
+        .map((item) => {
+          const [nombre, rol] = item.split("-");
+          return {
+            nombre: nombre?.trim(),
+            rol: rol?.trim()
+          };
+        })
+    });
+
+    setProyectos(proyectoService.obtenerProyectos());
+
+    setFormulario({
+      titulo: "",
+      categoria: "",
+      estado: "En curso",
+      descripcion: "",
+      recursos: "",
+      equipo: ""
+    });
+  };
+
+  const handleEliminar = (id) => {
+    proyectoService.eliminarProyecto(id);
+    setProyectos(proyectoService.obtenerProyectos());
   };
 
   return (
     <div id="listado-proyectos">
-      <h2>Lista de Proyectos</h2>
-
-      {/* Campo de búsqueda */}
+      <h2>Lista de Proyectos Educativos</h2>
       <input
+        className="input-busqueda"
         type="text"
-        placeholder="Buscar proyecto por título..."
-        value={busqueda}
+        placeholder="Buscar proyecto..."
+        value={textoBusqueda}
         onChange={handleBuscar}
-        style={{
-          width: '100%',
-          padding: '1rem',
-          fontSize: '1.6rem',
-          marginBottom: '2rem',
-          borderRadius: '0.5rem',
-          border: '1px solid #666'
-        }}
       />
 
-      <div className="contenedor-proyectos">
-        {proyectos.length === 0 ? (
-          <p>No se encontraron proyectos.</p>
-        ) : (
-          proyectos.map(proyecto => (
-            <div key={proyecto.id} className="proyecto">
-              <img src="https://via.placeholder.com/200" alt={proyecto.titulo} />
-              <div className="informacion">
-                <h3>{proyecto.titulo}</h3>
-                <p><strong>Categoría:</strong> {proyecto.categoria}</p>
-                <p><strong>Estado:</strong> {proyecto.estado}</p>
-                
-                <button 
-                  onClick={() => handleEliminar(proyecto.id)}
-                  style={{
-                    backgroundColor: '#e73131',
-                    color: 'white',
-                    padding: '0.8rem 1.5rem',
-                    border: 'none',
-                    borderRadius: '0.5rem',
-                    cursor: 'pointer',
-                    marginTop: '1rem'
-                  }}
-                >
-                  Eliminar Proyecto
-                </button>
-              </div>
-            </div>
-          ))
-        )}
+      <div className="Barra-filtros">
+        <div className="campo-inicial">
+          <input
+          type="text"
+          name="titulo"
+          placeholder="Título del proyecto"
+          className="campo-titulo"
+          value={formulario.titulo}
+          onChange={handleChange}
+        />
+
+        <input
+          type="text"
+          name="categoria"
+          placeholder="Categoría"
+          className="campo-categoria"
+          value={formulario.categoria}
+          onChange={handleChange}
+        />
+        <input
+          type="text"
+          name="recursos"
+          placeholder="PDF, Drive, GitHub"
+          className="campo-recursos"
+          value={formulario.recursos}
+          onChange={handleChange}
+        />
+
+        <input
+          type="text"
+          name="equipo"
+          placeholder="Nombre-Rol, Nombre-Rol"
+          className="campo-equipo"
+          value={formulario.equipo}
+          onChange={handleChange}
+        />
+        <select
+          name="estado"
+          value={formulario.estado}
+          onChange={handleChange}
+        >
+          <option value="En curso">En curso</option>
+          <option value="Finalizado">Finalizado</option>
+        </select>
+        </div>
+        <textarea
+          name="descripcion"
+          placeholder="Descripción"
+          className="campo-descripcion"
+          value={formulario.descripcion}
+          onChange={handleChange}
+        />
+
+        
+
+        
+
+        <button
+          className="btn-crear"
+          onClick={handleAgregarProyecto}
+        >
+          Agregar Proyecto
+        </button>
       </div>
+
+      <div className="contenedor-proyectos">
+        {proyectosFiltrados.map((proyecto) => (
+          <ProyectoCard
+            key={proyecto.id}
+            proyecto={proyecto}
+            onEliminar={handleEliminar}
+            onVerDetalle={handleVerDetalle}
+          />
+        ))}
+      </div>
+
+      <DetalleProyecto proyecto={proyectoSeleccionado} />
     </div>
   );
 };
